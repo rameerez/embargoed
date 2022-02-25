@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Turnout::MaintenancePage::HTML do
+describe Embargoed::MaintenancePage::HTML do
   describe 'class methods' do
-    subject { Turnout::MaintenancePage::HTML }
+    subject { Embargoed::MaintenancePage::HTML }
 
     its(:media_types) { should eql %w{text/html application/xhtml+xml} }
     its('new.media_types') { should eql %w{text/html application/xhtml+xml} }
@@ -12,7 +12,7 @@ describe Turnout::MaintenancePage::HTML do
 
   describe 'instance methods' do
     let(:reason) { nil }
-    let(:instance) { Turnout::MaintenancePage::HTML.new(*[reason].compact) }
+    let(:instance) { Embargoed::MaintenancePage::HTML.new(*[reason].compact) }
     subject { instance }
 
     describe '#reason' do
@@ -60,7 +60,7 @@ describe Turnout::MaintenancePage::HTML do
 
       context 'with a custom maintenance_pages_path' do
         before do
-          allow(Turnout.config).to receive(:maintenance_pages_path).and_return File.expand_path("../../../#{dirname}/", __FILE__)
+          allow(Embargoed.config).to receive(:maintenance_pages_path).and_return File.expand_path("../../../#{dirname}/", __FILE__)
         end
 
         context 'when a file exists' do

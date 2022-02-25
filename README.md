@@ -1,6 +1,6 @@
-Turnout [![Build Status](https://travis-ci.org/biola/turnout.svg?branch=master)](https://travis-ci.org/biola/turnout) [![Code Climate](https://codeclimate.com/github/biola/turnout.svg)](https://codeclimate.com/github/biola/turnout) [![Gem Version](https://badge.fury.io/rb/turnout.svg)](https://badge.fury.io/rb/turnout)
+Embargoed [![Build Status](https://travis-ci.org/biola/embargoed.svg?branch=master)](https://travis-ci.org/biola/embargoed) [![Code Climate](https://codeclimate.com/github/biola/embargoed.svg)](https://codeclimate.com/github/biola/embargoed) [![Gem Version](https://badge.fury.io/rb/embargoed.svg)](https://badge.fury.io/rb/embargoed)
 =======
-Turnout is [Rack](http://rack.rubyforge.org/) middleware with a [Ruby on Rails](http://rubyonrails.org) engine that allows you to easily put your app in maintenance mode.
+Embargoed is [Rack](http://rack.rubyforge.org/) middleware with a [Ruby on Rails](http://rubyonrails.org) engine that allows you to easily put your app in maintenance mode.
 
 Features
 ========
@@ -21,7 +21,7 @@ Rails 3+
 --------
 In your `Gemfile` add:
 
-    gem 'turnout'
+    gem 'embargoed'
 
 then run
 
@@ -35,17 +35,17 @@ Sinatra
 In your Sinatra app file
 
 ```ruby
-require 'rack/turnout'
+require 'rack/embargoed'
 
 class App < Sinatra::Base
   configure do
-    use Rack::Turnout
+    use Rack::Embargoed
 ```
 
 In your Rakefile
 
 ```ruby
-require 'turnout/rake_tasks'
+require 'embargoed/rake_tasks'
 ```
 
 Activation
@@ -93,16 +93,16 @@ or if you activated with a named path like `server`
 Configuration
 =============
 
-Turnout can be configured in two different ways:
+Embargoed can be configured in two different ways:
 
 1. __Pass a config hash to the middleware__
 
     ```ruby
-    use Rack::Turnout,
+    use Rack::Embargoed,
       app_root: '/some/path',
       named_maintenance_file_paths: {app: 'tmp/app.yml', server: '/tmp/server.yml'},
       maintenance_pages_path: 'app/views/maintenance',
-      default_maintenance_page: Turnout::MaintenancePage::JSON,
+      default_maintenance_page: Embargoed::MaintenancePage::JSON,
       default_reason: 'Somebody googled Google!',
       default_allowed_paths: ['^/admin/'],
       default_response_code: 418,
@@ -112,12 +112,12 @@ Turnout can be configured in two different ways:
 2. __Using a config block__
 
     ```ruby
-    Turnout.configure do |config|
+    Embargoed.configure do |config|
       config.skip_middleware = true
       config.app_root = '/some/path'
       config.named_maintenance_file_paths = {app: 'tmp/app.yml', server: '/tmp/server.yml'}
       config.maintenance_pages_path = 'app/views/maintenance'
-      config.default_maintenance_page = Turnout::MaintenancePage::JSON
+      config.default_maintenance_page = Embargoed::MaintenancePage::JSON
       config.default_reason = 'Somebody googled Google!'
       config.default_allowed_paths = ['^/admin/']
       config.default_response_code = 418
@@ -131,11 +131,11 @@ Default Configuration
 ---------------------
 
 ```ruby
-Turnout.configure do |config|
+Embargoed.configure do |config|
   config.app_root = '.'
   config.named_maintenance_file_paths = {default: config.app_root.join('tmp', 'maintenance.yml').to_s}
   config.maintenance_pages_path = config.app_root.join('public').to_s
-  config.default_maintenance_page = Turnout::MaintenancePage::HTML
+  config.default_maintenance_page = Embargoed::MaintenancePage::HTML
   config.default_reason = "The site is temporarily down for maintenance.\nPlease check back soon."
   config.default_allowed_paths = []
   config.default_response_code = 503
@@ -146,7 +146,7 @@ end
 Customization
 =============
 
-[Default maintenance pages](https://github.com/biola/turnout/blob/master/public/) are provided, but you can create your own `public/maintenance.[html|json|html.erb]` files instead. If you provide a `reason` to the rake task, Turnout will parse the maintenance page file and attempt to replace a [Liquid](http://liquidmarkup.org/)-style `{{ reason }}` tag with the provided reason. So be sure to include a `{{ reason }}` tag in your `maintenance.html` file. In the case of a `.html.erb` file, `reason` will be a local variable.
+[Default maintenance pages](https://github.com/biola/embargoed/blob/master/public/) are provided, but you can create your own `public/maintenance.[html|json|html.erb]` files instead. If you provide a `reason` to the rake task, Embargoed will parse the maintenance page file and attempt to replace a [Liquid](http://liquidmarkup.org/)-style `{{ reason }}` tag with the provided reason. So be sure to include a `{{ reason }}` tag in your `maintenance.html` file. In the case of a `.html.erb` file, `reason` will be a local variable.
 
 __WARNING:__
 The source code of any custom maintenance files you created in the `/public` directory will be able to be viewed by visiting that URL directly (i.e. `http://example.com/maintenance.html.erb`). This shouldn't be an issue with HTML and JSON files but with ERB files, it could be. If you're going to use a custom `.erb.html` file, we recommend you change the `maintenance_pages_path` setting to something other than the `/public` directory.
@@ -156,7 +156,7 @@ Tips
 
 Denied Paths
 --------------
-There is no `denied_paths` feature because turnout denies everything by default.
+There is no `denied_paths` feature because embargoed denies everything by default.
 However you can achieve the same sort of functionality by using
 [negative lookaheads](http://www.regular-expressions.info/lookaround.html) with the `allowed_paths` setting, like so:
 
@@ -164,12 +164,12 @@ However you can achieve the same sort of functionality by using
 
 Multi-App Maintenance
 ------------------------
-A central `named_maintenance_file_path` can be configured in all your apps such as `/tmp/turnout.yml` so that all apps on a server can be put into mainteance mode at once. You could even configure service based paths such as `/tmp/mongodb_maintenance.yml` so that all apps using MongoDB could be put into maintenance mode.
+A central `named_maintenance_file_path` can be configured in all your apps such as `/tmp/embargoed.yml` so that all apps on a server can be put into mainteance mode at once. You could even configure service based paths such as `/tmp/mongodb_maintenance.yml` so that all apps using MongoDB could be put into maintenance mode.
 
 Detecting Maintenance Mode
 -------------------------------
 
-If you'd like to detect if maintenance mode is on in your app (for those users or pages that aren't blocked) just call `!Turnout::MaintenanceFile.find.nil?`.
+If you'd like to detect if maintenance mode is on in your app (for those users or pages that aren't blocked) just call `!Embargoed::MaintenanceFile.find.nil?`.
 
 Behind the Scenes
 =================
@@ -177,7 +177,7 @@ On every request the Rack app will check to see if `tmp/maintenance.yml` exists.
 
 So if you want to get the maintenance page up or down in a hurry `touch tmp/maintenance.yml` and `rm tmp/maintenance.yml` will work.
 
-Turnout will attempt to parse the `maintenance.yml` file looking for `reason`, `allowed_ip` and other settings. The file is checked on every request so you can change these values manually or just rerun the `rake maintenance:start` command.
+Embargoed will attempt to parse the `maintenance.yml` file looking for `reason`, `allowed_ip` and other settings. The file is checked on every request so you can change these values manually or just rerun the `rake maintenance:start` command.
 
 Example maintenance.yml File
 ----------------------------

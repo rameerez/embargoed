@@ -4,12 +4,12 @@ require 'tilt/erb'
 require_relative './html'
 require_relative '../i18n/internationalization'
 
-module Turnout
+module Embargoed
   module MaintenancePage
-    class Erb < Turnout::MaintenancePage::HTML
+    class Erb < Embargoed::MaintenancePage::HTML
 
       def content
-        Turnout::Internationalization.initialize_i18n(@options[:env])
+        Embargoed::Internationalization.initialize_i18n(@options[:env])
         Tilt.new(File.expand_path(path)).render(self, {reason: reason}.merge(@options))
       end
       

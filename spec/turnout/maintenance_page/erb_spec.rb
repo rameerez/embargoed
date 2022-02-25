@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Turnout::MaintenancePage::Erb do
+describe Embargoed::MaintenancePage::Erb do
   describe 'class methods' do
 
     its(:media_types) { should eql %w{text/html application/xhtml+xml} }
@@ -9,7 +9,7 @@ describe Turnout::MaintenancePage::Erb do
 
   describe 'instance methods' do
     let(:reason) { nil }
-    let(:instance) { Turnout::MaintenancePage::Erb.new(*[reason].compact) }
+    let(:instance) { Embargoed::MaintenancePage::Erb.new(*[reason].compact) }
     subject { instance }
 
     describe '#reason' do

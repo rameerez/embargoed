@@ -1,6 +1,6 @@
 require 'ipaddr'
 
-module Turnout
+module Embargoed
   class Request
     def initialize(env)
       @rack_request = Rack::Request.new(env)

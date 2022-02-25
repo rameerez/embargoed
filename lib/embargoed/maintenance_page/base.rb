@@ -1,4 +1,4 @@
-module Turnout
+module Embargoed
   module MaintenancePage
     class Base
       attr_reader :reason
@@ -9,7 +9,7 @@ module Turnout
       end
 
       def rack_response(code = nil, retry_after = nil)
-        code ||= Turnout.config.default_response_code
+        code ||= Embargoed.config.default_response_code
         [code, headers(retry_after), body]
       end
 
@@ -26,7 +26,7 @@ module Turnout
       def extension() self.class.extension end
 
       def custom_path
-        Pathname.new(Turnout.config.maintenance_pages_path).join(filename)
+        Pathname.new(Embargoed.config.maintenance_pages_path).join(filename)
       end
 
       protected

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Turnout::OrderedOptions do
+describe Embargoed::OrderedOptions do
   it 'tests usages' do
-    a = Turnout::OrderedOptions.new
+    a = Embargoed::OrderedOptions.new
 
     expect(a[:not_set]).to be_nil
 
@@ -20,7 +20,7 @@ describe Turnout::OrderedOptions do
   end
 
   it 'tests looping' do
-    a = Turnout::OrderedOptions.new
+    a = Embargoed::OrderedOptions.new
 
     a[:allow_concurrency] = true
     a["else_where"] = 56
@@ -34,7 +34,7 @@ describe Turnout::OrderedOptions do
   end
 
   it 'tests method access' do
-    a = Turnout::OrderedOptions.new
+    a = Embargoed::OrderedOptions.new
     expect(a.not_set).to eq(nil)
 
     a.allow_concurrency = true
@@ -50,24 +50,24 @@ describe Turnout::OrderedOptions do
     expect(a.else_where).to eq(56)
   end
   it 'tests inheritable_options_continues_lookup_in_parent' do
-    parent = Turnout::OrderedOptions.new
+    parent = Embargoed::OrderedOptions.new
     parent[:foo] = true
 
-    child = Turnout::InheritableOptions.new(parent)
+    child = Embargoed::InheritableOptions.new(parent)
     expect(child.foo).to eq(true)
   end
 
   it 'tests inheritable_options_can_override_parent' do
-    parent = Turnout::OrderedOptions.new
+    parent = Embargoed::OrderedOptions.new
     parent[:foo] = true
 
-    child = Turnout::InheritableOptions.new(parent)
+    child = Embargoed::InheritableOptions.new(parent)
     child[:foo] = :baz
     expect(child.foo).to eq(:baz)
   end
 
   it 'tests inheritable_options_inheritable_copy' do
-    original = Turnout::InheritableOptions.new
+    original = Embargoed::InheritableOptions.new
     copy     = original.inheritable_copy
 
     expect(copy.kind_of?(original.class)).to be_truthy
@@ -76,13 +76,13 @@ describe Turnout::OrderedOptions do
 
   it 'tests inheritable_options_inheritable_copy from hash' do
     parent = {foo: true }
-    child = Turnout::InheritableOptions.new(parent)
+    child = Embargoed::InheritableOptions.new(parent)
     expect(child.foo).to eq(true)
   end
 
 
   it 'tests introspection' do
-    a = Turnout::OrderedOptions.new
+    a = Embargoed::OrderedOptions.new
     expect(a.respond_to?(:blah)).to be_truthy
     expect(a.respond_to?(:blah=)).to be_truthy
     expect(a.method(:blah=).call(42)).to eq(42)
@@ -90,7 +90,7 @@ describe Turnout::OrderedOptions do
   end
 
   it 'tests test_raises_with_bang' do
-    a = Turnout::OrderedOptions.new
+    a = Embargoed::OrderedOptions.new
     a[:foo] = :bar
     expect(a.respond_to?(:foo)).to be_truthy
     expect { a.foo! }.to_not raise_error
@@ -107,7 +107,7 @@ describe Turnout::OrderedOptions do
   it 'tests test_raises_with_bang' do
     hash = {key: :value}
     fake =  double(to_hash: hash)
-    a = Turnout::OrderedOptions.new(fake) do |key, value|
+    a = Embargoed::OrderedOptions.new(fake) do |key, value|
       hash[key]
     end
     expect(a).to eq({:key=>:value})

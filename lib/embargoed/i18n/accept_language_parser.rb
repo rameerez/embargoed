@@ -1,4 +1,4 @@
-module Turnout
+module Embargoed
   class AcceptLanguageParser
     attr_accessor :header
 

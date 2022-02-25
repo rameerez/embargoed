@@ -1,5 +1,5 @@
 require_relative './base'
-module Turnout
+module Embargoed
   module MaintenancePage
     class HTML < Base
       def reason

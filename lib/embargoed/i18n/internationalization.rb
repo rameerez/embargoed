@@ -3,7 +3,7 @@ require 'i18n/backend/fallbacks'
 require_relative './accept_language_parser'
 require_relative '../ordered_options'
 
-module Turnout
+module Embargoed
   class Internationalization
     class << self
       attr_reader :env
@@ -15,17 +15,17 @@ module Turnout
       end
 
       def i18n_config
-        @i18n_config = Turnout.config.i18n
-        @i18n_config =  @i18n_config.is_a?(Turnout::OrderedOptions) ? @i18n_config : Turnout::InheritableOptions.new(@i18n_config)
+        @i18n_config = Embargoed.config.i18n
+        @i18n_config =  @i18n_config.is_a?(Embargoed::OrderedOptions) ? @i18n_config : Embargoed::InheritableOptions.new(@i18n_config)
       end
 
-      def turnout_page
-        @turnout_page ||= Turnout.config.default_maintenance_page
+      def embargoed_page
+        @embargoed_page ||= Embargoed.config.default_maintenance_page
       end
 
       def http_accept_language
         language = (env.nil? || env.empty?) ? nil : env["HTTP_ACCEPT_LANGUAGE"]
-        @http_accept_language ||= Turnout::AcceptLanguageParser.new(language)
+        @http_accept_language ||= Embargoed::AcceptLanguageParser.new(language)
       end
 
       def setup_additional_helpers
@@ -33,7 +33,7 @@ module Turnout
         i18n_additional_helpers = i18n_additional_helpers.is_a?(Array) ? i18n_additional_helpers : []
 
         i18n_additional_helpers.each do |helper|
-          turnout_page.send(:include, helper) if helper.is_a?(Module)
+          embargoed_page.send(:include, helper) if helper.is_a?(Module)
         end
       end
 
@@ -114,7 +114,7 @@ module Turnout
         include_fallbacks_module
 
         args = case fallbacks
-        when Turnout::OrderedOptions
+        when Embargoed::OrderedOptions
           [*(fallbacks[:defaults] || []) << fallbacks[:map]].compact
         when Hash, Array
           array_wrap(fallbacks)
@@ -127,7 +127,7 @@ module Turnout
 
       def validate_fallbacks(fallbacks)
         case fallbacks
-        when Turnout::OrderedOptions
+        when Embargoed::OrderedOptions
           !fallbacks.empty?
         when TrueClass, Array, Hash
           true

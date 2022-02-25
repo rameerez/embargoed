@@ -1,4 +1,4 @@
-module Turnout
+module Embargoed
   class OrderedOptions < Hash
     alias_method :_get, :[] # preserve the original #[] method
     protected :_get # make it protected
@@ -79,9 +79,9 @@ module Turnout
   #   h = ActiveSupport::InheritableOptions.new({ girl: 'Mary', boy: 'John' })
   #   h.girl # => 'Mary'
   #   h.boy  # => 'John'
-  class InheritableOptions < Turnout::OrderedOptions
+  class InheritableOptions < Embargoed::OrderedOptions
     def initialize(parent = nil)
-      if parent.kind_of?(Turnout::OrderedOptions)
+      if parent.kind_of?(Embargoed::OrderedOptions)
         # use the faster _get when dealing with OrderedOptions
         super(parent) {|key,value| parent._get(key) }
       elsif parent

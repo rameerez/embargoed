@@ -1,6 +1,6 @@
 require 'json'
 
-module Turnout
+module Embargoed
   module MaintenancePage
     class JSON < Base
       def reason
