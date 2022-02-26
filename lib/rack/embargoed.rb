@@ -5,22 +5,22 @@ class Rack::Embargoed
   def initialize(app, config={})
     @app = app
 
-    Embargoed.config.update config
+    # Embargoed.config.update config
 
-    if config[:app_root].nil? && app.respond_to?(:app_root)
-      Embargoed.config.app_root = app.app_root
-    end
+    # if config[:app_root].nil? && app.respond_to?(:app_root)
+    #   Embargoed.config.app_root = app.app_root
+    # end
   end
 
   def call(env)
     request = Embargoed::Request.new(env)
-    settings = Embargoed::MaintenanceFile.find
+    # settings = Embargoed::MaintenanceFile.find
 
-    if settings && !request.allowed?(settings)
+    if !request.allowed?
       page_class = Embargoed::MaintenancePage.best_for(env)
-      page = page_class.new(settings.reason, env: env)
+      page = page_class.new("Reason", env: env)
 
-      page.rack_response(settings.response_code, settings.retry_after)
+      page.rack_response(503, 7200)
     else
       @app.call(env)
     end

@@ -6,21 +6,25 @@ module Embargoed
       @rack_request = Rack::Request.new(env)
     end
 
-    def allowed?(settings)
-      path_allowed?(settings.allowed_paths) || ip_allowed?(settings.allowed_ips)
+    def allowed?
+      path_allowed? || ip_allowed?
     end
 
     private
 
     attr_reader :rack_request
 
-    def path_allowed?(allowed_paths)
+    def path_allowed?
+      allowed_paths = []
+
       allowed_paths.any? do |allowed_path|
         rack_request.path =~ Regexp.new(allowed_path)
       end
     end
 
-    def ip_allowed?(allowed_ips)
+    def ip_allowed?
+      allowed_ips = ["127.0.0.2"]
+
       begin
         ip = IPAddr.new(rack_request.ip.to_s)
       rescue ArgumentError
