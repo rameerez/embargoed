@@ -6,7 +6,11 @@ People are already working on making Wordpress and Django ports of this. If you 
 
 Here's the message that replaces all pages of your app:
 
-![Embargoed message displayed to Russian visitors](https://github.com/rameerez/embargoed/blob/main/public/embargoed-message.jpg?raw=true)
+
+<p align="center">
+  <img src="https://github.com/rameerez/embargoed/blob/main/public/embargoed-message.jpg?raw=true" alt="Embargoed message displayed to Russian visitors" width="400"/>
+</p>
+
 
 
 ## Installation
