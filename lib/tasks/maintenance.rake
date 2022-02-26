@@ -1,4 +1,4 @@
-require 'turnout'
+require 'embargoed'
 
 namespace :maintenance do
   desc 'Enable the maintenance mode page ("reason", "allowed_paths", "allowed_ips" and "response_code" can be passed as environment variables)'
@@ -36,9 +36,9 @@ namespace :maintenance do
     path_name = (task.name.split(':') - ['maintenance', 'start', 'end']).join(':')
 
     maint_file = if path_name == ''
-      Turnout::MaintenanceFile.default
+      Embargoed::MaintenanceFile.default
     else
-      Turnout::MaintenanceFile.named(path_name)
+      Embargoed::MaintenanceFile.named(path_name)
     end
 
     fail %{Unknown path name: "#{path_name}"} if maint_file.nil?

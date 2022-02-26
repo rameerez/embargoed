@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe Turnout::Request do
+describe Embargoed::Request do
   let(:path) { '/' }
   let(:ip) { '127.0.0.1' }
   let(:env) { Rack::MockRequest.env_for(path, 'REMOTE_ADDR' => ip) }
-  let(:request) { Turnout::Request.new(env) }
+  let(:request) { Embargoed::Request.new(env) }
 
   describe '#allowed?' do
     let(:file_name) { 'missing' }
     let(:file_path) { File.expand_path("../../fixtures/#{file_name}.yml", __FILE__) }
-    let(:settings) { Turnout::MaintenanceFile.new(file_path) }
+    let(:settings) { Embargoed::MaintenanceFile.new(file_path) }
     subject { request.allowed?(settings) }
 
     context 'without a maintenance file' do

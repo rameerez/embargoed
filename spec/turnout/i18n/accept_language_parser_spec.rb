@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Turnout::AcceptLanguageParser do
+describe Embargoed::AcceptLanguageParser do
     let(:languages) { 'en-us,en-gb;q=0.8,en;q=0.6,es-419' }
 
     def parser
-      @parser ||= Turnout::AcceptLanguageParser.new(languages)
+      @parser ||= Embargoed::AcceptLanguageParser.new(languages)
     end
 
     it 'sets user_prefered_language' do

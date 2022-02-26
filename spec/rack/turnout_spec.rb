@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe 'Rack::Turnout' do
+describe 'Rack::Embargoed' do
   let(:endpoint) { TestApp.new }
-  let(:app) { Rack::Turnout.new(endpoint) }
+  let(:app) { Rack::Embargoed.new(endpoint) }
 
   context 'without a maintenance.yml file' do
     subject { get '/any_path' }
@@ -11,7 +11,7 @@ describe 'Rack::Turnout' do
   end
 
   context 'with a maintenance.yml file' do
-    before { Turnout.config.named_maintenance_file_paths = {fixture: 'spec/fixtures/maintenance.yml'} }
+    before { Embargoed.config.named_maintenance_file_paths = {fixture: 'spec/fixtures/maintenance.yml'} }
     # maintenance.yml:
     #   reason: Oopsie!
     #   allowed_paths: [/uuddlrlrba.*]

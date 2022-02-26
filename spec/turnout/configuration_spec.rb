@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Turnout::Configuration do
-  let(:config) { Turnout::Configuration.new }
+describe Embargoed::Configuration do
+  let(:config) { Embargoed::Configuration.new }
   subject { config }
 
   describe '#app_root' do
@@ -32,7 +32,7 @@ describe Turnout::Configuration do
   end
 
   describe '#default_maintenance_page' do
-    its(:default_maintenance_page) { should eql Turnout::MaintenancePage::HTML }
+    its(:default_maintenance_page) { should eql Embargoed::MaintenancePage::HTML }
   end
 
   describe '#default_reason' do

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Turnout::MaintenancePage::JSON do
+describe Embargoed::MaintenancePage::JSON do
   describe 'class methods' do
-    subject { Turnout::MaintenancePage::JSON }
+    subject { Embargoed::MaintenancePage::JSON }
 
     its(:media_types) { should eql %w{application/json text/json application/x-javascript text/javascript text/x-javascript text/x-json} }
     its('new.media_types') { should eql %w{application/json text/json application/x-javascript text/javascript text/x-javascript text/x-json} }
@@ -12,7 +12,7 @@ describe Turnout::MaintenancePage::JSON do
 
   describe 'instance methods' do
     let(:reason) { nil }
-    let(:instance) { Turnout::MaintenancePage::JSON.new(*[reason].compact) }
+    let(:instance) { Embargoed::MaintenancePage::JSON.new(*[reason].compact) }
     subject { instance }
 
     describe '#reason' do

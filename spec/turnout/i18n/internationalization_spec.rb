@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Turnout::Internationalization do
+describe Embargoed::Internationalization do
 
   module FakeHelper
     def fake_helper_method
@@ -33,7 +33,7 @@ describe Turnout::Internationalization do
 
 
   let(:env) { {'HTTP_ACCEPT_LANGUAGE' => 'en-us' } }
-  let(:subject) {  Turnout::Internationalization }
+  let(:subject) {  Embargoed::Internationalization }
   let(:helpers) { [FakeHelper, FakeHelperClass, nil, 0, false, true, '']  }
 
   it 'should not have an env' do
@@ -43,7 +43,7 @@ describe Turnout::Internationalization do
   describe '#initialize_i18n' do
 
     it 'initializes the i18n ' do
-      Turnout.config.i18n.enabled = true
+      Embargoed.config.i18n.enabled = true
       expect(subject).to receive(:setup_i18n_config).with(no_args).and_return(true)
       subject.initialize_i18n(env)
       expect(subject.env).to eq(env)
@@ -53,42 +53,42 @@ describe Turnout::Internationalization do
   describe '#i18n_config' do
     it 'sets the i18n config variable' do
       subject.i18n_config
-      expect(subject.instance_variable_get('@i18n_config')).to eq(Turnout.config.i18n)
+      expect(subject.instance_variable_get('@i18n_config')).to eq(Embargoed.config.i18n)
     end
 
     it 'sets the i18n config variable from a Hash' do
-      original = Turnout.config.i18n
-      Turnout.config.i18n = {key: :value }
-      expect(Turnout::InheritableOptions).to receive(:new).with(Turnout.config.i18n)
+      original = Embargoed.config.i18n
+      Embargoed.config.i18n = {key: :value }
+      expect(Embargoed::InheritableOptions).to receive(:new).with(Embargoed.config.i18n)
       subject.i18n_config
-      Turnout.config.i18n = original
+      Embargoed.config.i18n = original
     end
   end
 
-  describe '#turnout_page' do
-    it 'sets the turnout page' do
-      subject.turnout_page
-      expect(subject.instance_variable_get('@turnout_page')).to eq(Turnout.config.default_maintenance_page)
+  describe '#embargoed_page' do
+    it 'sets the embargoed page' do
+      subject.embargoed_page
+      expect(subject.instance_variable_get('@embargoed_page')).to eq(Embargoed.config.default_maintenance_page)
     end
   end
 
   describe '#http_accept_language' do
     it 'sets the http_accept_language' do
       subject.env = nil
-      expect(Turnout::AcceptLanguageParser).to receive(:new).with(nil)
+      expect(Embargoed::AcceptLanguageParser).to receive(:new).with(nil)
       subject.http_accept_language
     end
 
     it 'sets the http_accept_language and instantiates the parser' do
       subject.env = env
-      expect(Turnout::AcceptLanguageParser).to receive(:new).with(env['HTTP_ACCEPT_LANGUAGE'])
+      expect(Embargoed::AcceptLanguageParser).to receive(:new).with(env['HTTP_ACCEPT_LANGUAGE'])
       subject.http_accept_language
     end
 
     it 'sets the http_accept_language' do
       subject.env = env
       subject.http_accept_language
-      expect(subject.instance_variable_get('@http_accept_language').kind_of?(Turnout::AcceptLanguageParser)).to eq(true)
+      expect(subject.instance_variable_get('@http_accept_language').kind_of?(Embargoed::AcceptLanguageParser)).to eq(true)
     end
 
   end
@@ -101,14 +101,14 @@ describe Turnout::Internationalization do
     end
 
     it 'includes additional helpers' do
-      original = Turnout.config.i18n
-      Turnout.config.i18n.additional_helpers = helpers
+      original = Embargoed.config.i18n
+      Embargoed.config.i18n.additional_helpers = helpers
       helpers.each do |helper|
         expected =  helper.is_a?(Module) ? 'to' : 'to_not'
-        expect(subject.turnout_page).send(expected, receive(:send).with(:include, helper))
+        expect(subject.embargoed_page).send(expected, receive(:send).with(:include, helper))
       end
       subject.setup_additional_helpers
-      Turnout.config.i18n = original
+      Embargoed.config.i18n = original
     end
   end
 
@@ -158,24 +158,24 @@ describe Turnout::Internationalization do
 
 
       it 'makes sure that unshift and flatten are happening' do
-        original = Turnout.config.i18n
-        Turnout.config.i18n.railties_load_path = [locales_dir]
+        original = Embargoed.config.i18n
+        Embargoed.config.i18n.railties_load_path = [locales_dir]
         expect(I18n).to receive(:load_path).and_return(fake_load_path).at_least(:once)
         expect(fake_load_path).to receive(:unshift).with(*[locales_dir].map { |file| existent(file) }.flatten).and_return([])
         subject.setup_i18n_config
-        Turnout.config.i18n = original
+        Embargoed.config.i18n = original
       end
 
       it 'sets the load path from globbed paths' do
         I18n.load_path = []
-        Turnout.config.i18n.railties_load_path = [locales_dir]
+        Embargoed.config.i18n.railties_load_path = [locales_dir]
         subject.setup_i18n_config
         expect(I18n.load_path).to eq([de_locale, en_locale])
       end
 
       it 'sets the load path from single paths' do
         I18n.load_path = []
-        Turnout.config.i18n.railties_load_path = [de_locale, en_locale]
+        Embargoed.config.i18n.railties_load_path = [de_locale, en_locale]
         subject.setup_i18n_config
         expect(I18n.load_path).to eq([de_locale, en_locale])
       end
@@ -183,23 +183,23 @@ describe Turnout::Internationalization do
     context '#load_path' do
       it 'add to the load path from array' do
         I18n.load_path = []
-        Turnout.config.i18n.railties_load_path = []
-        Turnout.config.i18n.load_path = fake_paths
+        Embargoed.config.i18n.railties_load_path = []
+        Embargoed.config.i18n.load_path = fake_paths
         subject.setup_i18n_config
         expect(I18n.load_path).to eq(fake_paths)
-        Turnout.config.i18n.load_path = []
+        Embargoed.config.i18n.load_path = []
       end
     end
 
     context 'send dynamic methods to I18n' do
       it 'add to the load path from array' do
-        original = Turnout.config.i18n
-        Turnout.config.i18n = { key1: :value1,  key2: :value2, enabled: true }
-        Turnout.config.i18n.select{|key, value| ![:enabled].include?(key) }.each do |key, value|
+        original = Embargoed.config.i18n
+        Embargoed.config.i18n = { key1: :value1,  key2: :value2, enabled: true }
+        Embargoed.config.i18n.select{|key, value| ![:enabled].include?(key) }.each do |key, value|
           expect(I18n).to receive(:send).with("#{key}=", value)
         end
         subject.setup_i18n_config
-        Turnout.config.i18n = original
+        Embargoed.config.i18n = original
       end
     end
 
@@ -348,7 +348,7 @@ describe Turnout::Internationalization do
     end
 
     it 'uses ordered options' do
-      hash = Turnout::OrderedOptions.new({ map: :value })
+      hash = Embargoed::OrderedOptions.new({ map: :value })
       expected = [*(hash[:defaults] || []) << hash[:map]].compact
       expect(I18n::Locale::Fallbacks).to receive(:new).with(*expected).and_call_original
       subject.init_fallbacks(hash)
@@ -377,7 +377,7 @@ describe Turnout::Internationalization do
     end
 
     it 'uses ordered options' do
-      hash = Turnout::OrderedOptions.new({ map: :value })
+      hash = Embargoed::OrderedOptions.new({ map: :value })
       expect(hash).to receive(:empty?).and_call_original
       subject.validate_fallbacks(hash)
     end
