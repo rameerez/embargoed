@@ -23,7 +23,6 @@ module Embargoed
     end
 
     def ip_allowed?
-      allowed_ips = ["127.0.0.2"]
 
       begin
         ip = IPAddr.new(rack_request.ip.to_s)
@@ -31,9 +30,10 @@ module Embargoed
         return false
       end
 
-      allowed_ips.any? do |allowed_ip|
-        IPAddr.new(allowed_ip).include? ip
-      end
+      ip_country_code = IPLocator.get_country_code(ip)
+
+      ip_country_code != "RU"
+
     end
   end
 end

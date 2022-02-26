@@ -3,6 +3,7 @@ module Embargoed
   require 'embargoed/maintenance_file'
   require 'embargoed/maintenance_page'
   require 'embargoed/request'
+  require 'embargoed/ip_locator'
   require 'embargoed/engine' if defined? Rails
 
   def self.configure
