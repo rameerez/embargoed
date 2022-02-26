@@ -4,7 +4,7 @@ Embargoed is [Rack](http://rack.rubyforge.org/) middleware with a [Ruby on Rails
 
 Embargoed is a fork from [Turnout](https://github.com/biola/turnout).
 
-![Embargoed message displayed to Russian visitors](https://github.com/rameerez/embargoed/blob/main/../../../../../../public/embargoed-message.jpg?raw=true)
+![Embargoed message displayed to Russian visitors](https://github.com/rameerez/embargoed/blob/main/public/embargoed-message.jpg?raw=true)
 
 
 ## Installation
