@@ -14,6 +14,8 @@ module Embargoed
 
     attr_reader :rack_request
 
+    PROHIBITED_COUNTRIES = %w[RU BY]
+
     def path_allowed?
       allowed_paths = []
 
@@ -23,7 +25,6 @@ module Embargoed
     end
 
     def ip_allowed?
-
       begin
         ip = IPAddr.new(rack_request.ip.to_s)
       rescue ArgumentError
@@ -32,8 +33,7 @@ module Embargoed
 
       ip_country_code = IPLocator.get_country_code(ip)
 
-      ip_country_code != "RU"
-
+      !PROHIBITED_COUNTRIES.include? ip_country_code
     end
   end
 end

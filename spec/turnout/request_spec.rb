@@ -9,14 +9,32 @@ describe Embargoed::Request do
   describe '#allowed?' do
     let(:file_name) { 'missing' }
     let(:file_path) { File.expand_path("../../fixtures/#{file_name}.yml", __FILE__) }
-    let(:settings) { Embargoed::MaintenanceFile.new(file_path) }
-    subject { request.allowed?(settings) }
 
-    context 'without a maintenance file' do
-      it { should be false}
+    subject { request.allowed? }
+
+    context 'when country is Russia' do
+      before { allow(Embargoed::IPLocator).to receive(:get_country_code).and_return('RU') }
+
+      it { should be false }
     end
 
-    context 'with a maintenance file that sets allowed_paths and allowed_ips' do
+    context 'when country is Belarus' do
+      before { allow(Embargoed::IPLocator).to receive(:get_country_code).and_return('BY') }
+
+      it { should be false }
+    end
+
+    context 'when country is another' do
+      before { allow(Embargoed::IPLocator).to receive(:get_country_code).and_return('BR') }
+
+      it { should be true }
+    end
+
+    xcontext 'with a maintenance file that sets allowed_paths and allowed_ips' do
+      let(:settings) { Embargoed::MaintenanceFile.new(file_path) }
+
+      subject { request.allowed?(settings) }
+
       # maintenance.yml contains
       #   allowed_paths: [/uuddlrlrba.*]
       #   allowed_ips: [42.42.42.0/24]}
