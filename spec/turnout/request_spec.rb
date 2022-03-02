@@ -30,6 +30,7 @@ describe Embargoed::Request do
       it { should be true }
     end
 
+    # TODO: implement settings/maintenance file feature
     xcontext 'with a maintenance file that sets allowed_paths and allowed_ips' do
       let(:settings) { Embargoed::MaintenanceFile.new(file_path) }
 
